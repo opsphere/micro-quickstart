@@ -1,0 +1,26 @@
+debug = true
+salt = "111165de3c3adfb9dc4a79d1ca701111"
+intervalForUpdateValidStatus = 10 
+jobTimeoutHours = 8
+
+[server]
+listen = ":8527"
+
+[mongo]
+addr = "mongodb://mongo1:27017"
+user = "jcloud_fs"
+pass = "QvXgna47Tsx6HcYodjPFXg=="
+dbname = "jcloud-fs"
+fsdbname = "jscloud-fs-files"
+
+[services]
+basic = "http://jcloud-bs-svc:8090"
+basicrpc = "jcloud-bs-svc:8091"
+customer = "http://jcloud-customer-svc:9000"
+message = "http://jcloud-message-svc:8900"
+billing-backend = ""
+
+[secretkey]
+aws=""
+awscn=""
+

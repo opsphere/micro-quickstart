@@ -1,0 +1,15 @@
+[http]
+listen = "8999"
+
+[mysql]
+username = "root"
+password = "abcd.1234"
+port = "3306"
+host = "mysql-svc"
+database = "jcloud_ts"
+debug = false
+
+[service]
+url = "http://jcloud-bs-svc:8090"
+jycloud = "http://opsphere.cloud"
+emailurl = "http://jcloud-message-svc:8900"

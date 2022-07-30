@@ -1,0 +1,17 @@
+debug = true
+salt = "111165de3c3adfb9dc4a79d1ca701111"
+
+[server]
+listen = ":8900"
+
+[mysql]
+debug = true
+idle = 10
+max = 20
+maxopenconn = 10
+addr = "@tcp(mysql-svc:3306)/mc_message?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+user = "root"
+pass = "QvXgna47Tsx6HcYodjPFXg=="
+
+[services]
+basicrpc = "jcloud-bs-svc:8081"

@@ -1,0 +1,31 @@
+loglevel: TRACE 
+alert: true 
+audit: true 
+monitoring: true 
+sendMail: false
+externalIAMHost: http://jcloud-bs-svc:8090/ 
+prometheus:
+  host: https://localhost
+mysql:
+  database: kubestar
+  host: mysql-svc:3306
+  user: root
+  pass: abcd.1234
+redis:
+  host: redis-svc:6379
+  password: abcd.1234
+  maxIdle: 1
+  maxActive: 10
+  idleTimeout: 30
+cache: false  
+ui: true  
+activateLink: http://10.60.79.233:8810  
+verifyLink: http://10.60.79.233:8810  
+resetLink: http://10.60.79.233:8810  
+deployMode: server 
+mfa: false  
+auditType: MySQL 
+auditWriteOnly: true 
+controllers:
+  audits:
+    sleepSeconds: 180

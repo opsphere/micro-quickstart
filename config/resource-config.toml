@@ -1,0 +1,21 @@
+debug = true
+salt = "111165de3c3adfb9dc4a79d1ca701111"
+logFormat = "json"
+
+[mysql]
+debug = true
+idle = 10
+max = 20
+maxopenconn = 10
+addr = "@tcp(mysql-svc:3306)/multicloud?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+user = "root"
+pass = "abcd.1234"
+
+[services]
+basic = "http://jcloud-bs-svc:8090"
+basicrpc = "jcloud-bs-svc:8091"
+
+[secretkey]
+aws=""
+awscn=""
+

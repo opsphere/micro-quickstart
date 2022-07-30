@@ -1,0 +1,42 @@
+debug = true
+salt = "111165de3c3adfb9dc4a79d1ca701111"
+project = "SaaS"
+license = "Jf5rzc4d8SlgOuVFL4iQhqcevgWkwqM6Rb/PRHXxDeCn9hx4k5ev3kUCLi0NU5Ho8CL2LXsd5/PzFkTjDL/jrUF4VVWpWyYVC+GJEmKkZ66i8VlajNQsMMBuQitsDNZRglD3cnO+Zpj4Bd15OHM2asUkHwoc9ByKTMD/2BSZrJ+C7NDaTL/EXg=="
+
+[server]
+listen = ":8090"
+exp = "124h"
+domain = "http://star.cmcloud.org"
+rpclisten = ":8091"
+
+[mysql]
+[mysql.system]
+debug = true
+idle = 4
+max = 10
+maxopenconn = 10
+addr = "@tcp(mysql-svc:3306)/mc_system?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+user = "root"
+pass = "QvXgna47Tsx6HcYodjPFXg=="
+[mysql.basic]
+debug = true
+idle = 10
+max = 20
+maxopenconn = 10
+addr = "@tcp(mysql-svc:3306)/mc_org?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+user = "root"
+pass = "QvXgna47Tsx6HcYodjPFXg=="
+
+[redis]
+addrs=["redis-svc:6379"]
+pass="QvXgna47Tsx6HcYodjPFXg=="
+
+[services]
+billing = "http://jcloud-fs-svc:8527"
+message = "http://jcloud-message-svc:8900"
+idp = "http://jcloud-idp-svc:8800"
+resource = "http://jcloud-rs-svc:8080"
+resource-sync = "http://jcloud-rs-sync-svc:8080"
+
+[dependencies]
+

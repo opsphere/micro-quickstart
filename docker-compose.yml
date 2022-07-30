@@ -1,0 +1,239 @@
+version: '1.0'
+services:
+  jcloud-nginx-svc:
+    container_name: jcloud-nginx
+    image: my-registry.tencentcloudcr.com/jcloud/nginx:1.23.1
+    depends_on:
+      - jcloud-front-svc
+      - jcloud-bs-svc
+    ports:
+      - 80:80
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - opsphere-network
+  jcloud-front-svc:
+    container_name: jcloud-front
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-front:release-test-jcloud.front-v2.0.1.202207291138
+    expose:
+      - '80'
+    networks:
+      - opsphere-network
+  jcloud-bs-svc:
+    container_name: jcloud-bs
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-bs:release-test-202207261106
+    entrypoint: [ "/data/app/apiserver", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8090'
+      - '8091'
+    volumes:
+      - ./config/basic-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-cs-svc:
+    container_name: jcloud-cs
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-cs:release-test-202207281930
+    entrypoint: [ "/data/app/jcloud-cs", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '9000'
+    volumes:
+      - ./config/customer-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-fs-svc:
+    container_name: jcloud-fs
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-fs:release-test-202207291153
+    entrypoint: [ "/data/app/fee", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8527'
+    volumes:
+      - ./config/billing-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+  jcloud-idp-svc:
+    container_name: jcloud-idp
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-idp:release-test-202207291200
+    entrypoint: [ "/data/app/jcloud-idp", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8800'
+    volumes:
+      - ./config/idp-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-rs-apiserver-svc:
+    container_name: jcloud-rs-apiserver
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-rs-apiserver:release-test-jcloud.rs.apiserver-v2.0.1.202207291500
+    entrypoint: [ "/data/app/apiserver", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8080'
+    volumes:
+      - ./config/resource-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+      - jcloud-bs-svc
+  jcloud-rs-synchronize-svc:
+    container_name: jcloud-rs-synchronize
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-rs-synchronize:release-test-jcloud.rs.synchronize-v2.0.1.202207291425
+    entrypoint: [ "/data/app/synchronize", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8080'
+    volumes:
+      - ./config/resource-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-ts-svc:
+    container_name: jcloud-ts
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-ts:release-test-202207011605
+    entrypoint: [ "/data/app/api", "-t", "/data/app/conf/cfg-test.toml" ]
+    expose:
+      - '8999'
+      - '8081'
+    volumes:
+      - ./config/ticket-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  kubestar-svc:
+    container_name: kubestar
+    image: my-registry.tencentcloudcr.com/jcloud/kubestar:release-test-202207141516
+    entrypoint: [ "/kubestar", "-t", "/configs/default.yml" ]
+    expose:
+      - '8080'
+    volumes:
+      - ./config/kubestar-config.toml:/configs/default.yml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-message-svc:
+    container_name: jcloud-message
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-message:release-test-202207251930
+    entrypoint: [ "/data/app/jcloud-message", "-c", "/data/app/cfg-test.toml" ]
+    expose:
+      - '8900'
+    volumes:
+      - ./config/message-config.toml:/data/app/cfg-test.toml:ro
+    networks:
+      - opsphere-network
+    depends_on:
+      - mysql-svc
+      - redis-svc
+  jcloud-message-email:
+    container_name: jcloud-message-email
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
+    entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-email-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
+    expose:
+      - '8080'
+    networks:
+      - opsphere-network
+    depends_on:
+      - jcloud-message-svc
+  jcloud-message-sms:
+    container_name: jcloud-message-sms
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
+    entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-sms-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
+    expose:
+      - '8080'
+    networks:
+      - opsphere-network
+    depends_on:
+      - jcloud-message-svc
+  mysql-svc:
+    image: my-registry.tencentcloudcr.com/jcloud/mysql:5.7
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'abcd.1234'
+      LANG: C.UTF-8
+    expose:
+      - '3306'
+    networks:
+      - opsphere-network
+    volumes:
+      - ./sql/jcloud-ts.sql:/docker-entrypoint-initdb.d/jcloud-ts.sql:ro
+      - ./sql/mc_customer.sql:/docker-entrypoint-initdb.d/mc_customer.sql:ro
+      - ./sql/mc_message.sql:/docker-entrypoint-initdb.d/mc_message.sql:ro
+      - ./sql/mc_org.sql:/docker-entrypoint-initdb.d/mc_org.sql:ro
+      - ./sql/mc_system.sql:/docker-entrypoint-initdb.d/mc_system.sql:ro
+      - ./sql/multicloud.sql:/docker-entrypoint-initdb.d/multicloud.sql:ro
+  redis-svc:
+    container_name: redis
+    image: my-registry.tencentcloudcr.com/jcloud/redis:7.0.4
+    restart: always
+    expose:
+      - '6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass abcd.1234
+    volumes:
+      - cache:/data
+    networks:
+      - opsphere-network
+  mongo1:
+    container_name: mongo1
+    image: my-registry.tencentcloudcr.com/jcloud/mongo:4.4
+    volumes:
+      - ~/mongors/data1:/data/db
+      - ./init-mongodb-cluster.sh:/scripts/init-mongodb-cluster.sh
+      - ./add-mongodb-user.sh:/scripts/add-mongodb-user.sh
+    networks:
+      - opsphere-network
+    ports:
+      - 27021:27017
+    links:
+      - mongo2
+      - mongo3
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  mongo2:
+    container_name: mongo2
+    image: my-registry.tencentcloudcr.com/jcloud/mongo:4.4
+    volumes:
+      - ~/mongors/data2:/data/db
+    networks:
+      - opsphere-network
+    ports:
+      - 27022:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  mongo3:
+    container_name: mongo3
+    image: my-registry.tencentcloudcr.com/jcloud/mongo:4.4
+    volumes:
+      - ~/mongors/data3:/data/db
+    networks:
+      - opsphere-network
+    ports:
+      - 27023:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+
+networks:
+  opsphere-network:
+    driver: bridge
+volumes:
+  cache:
+    driver: local
+  db:
+    driver: local

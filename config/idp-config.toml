@@ -1,0 +1,30 @@
+debug = true
+salt = "111165de3c3adfb9dc4a79d1ca701111"
+
+[server]
+listen = ":8800"
+domain = "http://star.cmcloud.org"
+
+[mysql]
+debug = true
+idle = 10
+max = 20
+maxopenconn = 10
+addr = "@tcp(mysql-svc:3306)/mc_org?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+user = "root"
+pass = "QvXgna47Tsx6HcYodjPFXg=="
+
+[services]
+basicrpc = "jcloud-bs-svc:8081"
+
+[certificate]
+ip = []
+validtime = 10
+
+[certificate.meta_urls]
+aws="https://signin.aws.amazon.com/static/saml-metadata.xml"
+aws-cn="https://signin.amazonaws.cn/static/saml-metadata.xml"
+qcloud="https://cloud.tencent.com/saml.xml"
+aliyun="https://signin.aliyun.com/saml-role/sp-metadata.xml"
+huawei="https://auth.huaweicloud.com/authui/saml/metadata.xml"
+azure="https://login.microsoftonline.com/contoso.com/FederationMetadata/2007-06/FederationMetadata.xml"
