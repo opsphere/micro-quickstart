@@ -7,7 +7,7 @@ services:
       - jcloud-front-svc
       - jcloud-bs-svc
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
@@ -145,7 +145,7 @@ services:
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
     entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-email-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
     expose:
-      - '8080'
+      - '9529'
     networks:
       - opsphere-network
     depends_on:
@@ -153,9 +153,9 @@ services:
   jcloud-message-sms-svc:
     container_name: jcloud-message-sms
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
-    entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-sms-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
+    entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-sms-svc", "-name=sms","-upstream=http://jcloud-message-svc:8900" ]
     expose:
-      - '8080'
+      - '9528'
     networks:
       - opsphere-network
     depends_on:
