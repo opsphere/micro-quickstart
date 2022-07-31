@@ -14,4 +14,4 @@ user = "root"
 pass = "QvXgna47Tsx6HcYodjPFXg=="
 
 [services]
-basicrpc = "jcloud-bs-svc:8081"
+basicrpc = "jcloud-bs-svc:8091"

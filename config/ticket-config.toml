@@ -1,15 +1,19 @@
-[http]
-listen = "8999"
+debug = true
+baseUrl = "http://opsphere.cloud"
+
+[server]
+listen = ":8999"
 
 [mysql]
-username = "root"
-password = "abcd.1234"
-port = "3306"
-host = "mysql-svc"
-database = "jcloud_ts"
-debug = false
+user = "root"
+pass = "abcd.1234"
+addr = "@tcp(mysql-svc:3306)/jcloud_ts?charset=utf8&&loc=Asia%2FShanghai&parseTime=true"
+debug = true
+idle = 10
+max = 20
+maxopenconn = 10
 
-[service]
-url = "http://jcloud-bs-svc:8090"
-jycloud = "http://opsphere.cloud"
-emailurl = "http://jcloud-message-svc:8900"
+[services]
+basic = "http://jcloud-bs-svc:8090"
+message = "http://jcloud-message-svc:8900"
+

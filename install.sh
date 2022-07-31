@@ -5,8 +5,8 @@ docker_compose_cmd="docker-compose"
 
 #Declare service  array
 SvcArray=("jcloud-front-svc" "jcloud-bs-svc"  "jcloud-cs-svc"  "jcloud-fs-svc" \
- "jcloud-idp-svc"  "jcloud-rs-apiserver-svc"  "jcloud-rs-synchronize-svc" "jcloud-ts-svc" \
- "kubestar-svc" "jcloud-message-svc" "jcloud-message-email" "jcloud-message-sms" "jcloud-nginx-svc")
+ "jcloud-idp-svc"  "jcloud-rs-svc"  "jcloud-rs-sync-svc" "jcloud-ts-svc" \
+ "kubestar-svc" "jcloud-message-svc" "jcloud-message-email-svc" "jcloud-message-sms-svc" "jcloud-nginx-svc")
 
 function check_and_install_docker () {
   which "$docker_cmd" >/dev/null 2>&1
@@ -29,7 +29,7 @@ function check_and_install_docker_compose () {
 		return 0
 	fi
 	echo "Do docker-compose install"
-  curl -SL https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+  curl -SL https://docker-compose-1253413501.cos.ap-guangzhou.myqcloud.com/docker-compose-linux-x86_64  -o /usr/local/bin/docker-compose
   chmod +x /usr/local/bin/docker-compose && ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   if [ $? -eq 0 ]; then
     echo "Docker-compose: Install docker-compose successfully"
@@ -133,8 +133,14 @@ function start_opsphere() {
   done
 }
 
+function init_docker_dns() {
+    ./init-docker-dns.sh >/etc/docker/daemon.json
+    systemctl restart docker
+}
+
 check_and_install_docker
 check_and_install_docker_compose
+init_docker_dns
 start_mongodb
 mongodb_cluster_init
 start_mysql

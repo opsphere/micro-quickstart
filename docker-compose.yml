@@ -7,21 +7,21 @@ services:
       - jcloud-front-svc
       - jcloud-bs-svc
     ports:
-      - 80:80
+      - 8080:80
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - opsphere-network
   jcloud-front-svc:
     container_name: jcloud-front
-    image: my-registry.tencentcloudcr.com/jcloud/jcloud-front:release-test-jcloud.front-v2.0.1.202207291138
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-front:release-test-jcloud.front-v2.0.1.202207291838
     expose:
       - '80'
     networks:
       - opsphere-network
   jcloud-bs-svc:
     container_name: jcloud-bs
-    image: my-registry.tencentcloudcr.com/jcloud/jcloud-bs:release-test-202207261106
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-bs:release-test-202207291905
     entrypoint: [ "/data/app/apiserver", "-c", "/data/app/cfg-test.toml" ]
     expose:
       - '8090'
@@ -48,10 +48,10 @@ services:
       - redis-svc
   jcloud-fs-svc:
     container_name: jcloud-fs
-    image: my-registry.tencentcloudcr.com/jcloud/jcloud-fs:release-test-202207291153
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-fs:release-test-202207291545
     entrypoint: [ "/data/app/fee", "-c", "/data/app/cfg-test.toml" ]
     expose:
-      - '8527'
+      - '80'
     volumes:
       - ./config/billing-config.toml:/data/app/cfg-test.toml:ro
     networks:
@@ -73,8 +73,8 @@ services:
     depends_on:
       - mysql-svc
       - redis-svc
-  jcloud-rs-apiserver-svc:
-    container_name: jcloud-rs-apiserver
+  jcloud-rs-svc:
+    container_name: jcloud-rs
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-rs-apiserver:release-test-jcloud.rs.apiserver-v2.0.1.202207291500
     entrypoint: [ "/data/app/apiserver", "-c", "/data/app/cfg-test.toml" ]
     expose:
@@ -87,8 +87,8 @@ services:
       - mysql-svc
       - redis-svc
       - jcloud-bs-svc
-  jcloud-rs-synchronize-svc:
-    container_name: jcloud-rs-synchronize
+  jcloud-rs-sync-svc:
+    container_name: jcloud-rs-sync
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-rs-synchronize:release-test-jcloud.rs.synchronize-v2.0.1.202207291425
     entrypoint: [ "/data/app/synchronize", "-c", "/data/app/cfg-test.toml" ]
     expose:
@@ -108,7 +108,7 @@ services:
       - '8999'
       - '8081'
     volumes:
-      - ./config/ticket-config.toml:/data/app/cfg-test.toml:ro
+      - ./config/ticket-config.toml:/data/app/conf/cfg-test.toml:ro
     networks:
       - opsphere-network
     depends_on:
@@ -140,7 +140,7 @@ services:
     depends_on:
       - mysql-svc
       - redis-svc
-  jcloud-message-email:
+  jcloud-message-email-svc:
     container_name: jcloud-message-email
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
     entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-email-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
@@ -150,7 +150,7 @@ services:
       - opsphere-network
     depends_on:
       - jcloud-message-svc
-  jcloud-message-sms:
+  jcloud-message-sms-svc:
     container_name: jcloud-message-sms
     image: my-registry.tencentcloudcr.com/jcloud/jcloud-message.plugin:release-test-plugin-202206171400
     entrypoint: [ "/data/app/message", "-domain=http://jcloud-message-sms-svc", "-name=email","-upstream=http://jcloud-message-svc:8900" ]
