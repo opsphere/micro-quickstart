@@ -8,7 +8,7 @@
 # sh install.sh
 ```
 启动成功之后，会在终端看到 'Start Opsphere Successfully' 日志，默认前端监听的端口号为 80， 可以通过IP:PORT的方式访问云管平台控制台。
-![index](./static/img/index.png)
+![index](https://juyun-1253413501.cos.ap-beijing.myqcloud.com/opsphere/index.png)
 
 ## 开发调试
 ### 删除服务
