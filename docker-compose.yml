@@ -14,7 +14,7 @@ services:
       - opsphere-network
   jcloud-front-svc:
     container_name: jcloud-front
-    image: my-registry.tencentcloudcr.com/jcloud/jcloud-front:release-test-jcloud.front-v2.0.1.202207291838
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-front:release-test-jcloud.front-v2.0.1.202208021452
     expose:
       - '80'
     networks:
@@ -48,7 +48,7 @@ services:
       - redis-svc
   jcloud-fs-svc:
     container_name: jcloud-fs
-    image: my-registry.tencentcloudcr.com/jcloud/jcloud-fs:release-test-202207291545
+    image: my-registry.tencentcloudcr.com/jcloud/jcloud-fs:release-test-202208021656
     entrypoint: [ "/data/app/fee", "-c", "/data/app/cfg-test.toml" ]
     expose:
       - '80'
