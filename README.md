@@ -1,7 +1,7 @@
 # micro-quickstart
 
 ## 部署环境
-单实例部署需要一台物理机或者一台 4C
+单实例部署需要一台物理机或者一台 4C16G 的虚拟机，具备docker和docker-compose环境，然后下载该项目，按照如下步骤通过 install.sh 脚本一键部署。
 
 ## 一键部署
 ```
